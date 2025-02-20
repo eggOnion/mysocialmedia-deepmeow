@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: "http://localhost:3000", // Explicitly define frontend origin
+  origin: "https://mysocialmedia-deepmeow.vercel.app", // Explicitly define frontend origin
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true, // Allow credentials (cookies, sessions) 
   allowedHeaders: ["Content-Type", "Authorization"]
@@ -28,11 +28,11 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false, httpOnly: true, sameSite: 'Lax' } // Set to true if using HTTPS
+  cookie: { secure: true, httpOnly: true, sameSite: 'None' } // Set to true if using HTTPS
 }));
 
-// const allowedOrigins = ["http://localhost:3000", "https://xxx"];
 
+// const allowedOrigins = ["http://localhost:3000", "https://xxx"];
 app.use((req, res, next) => {
   // const origin = req.headers.origin;
   // if (allowedOrigins.includes(origin)) {
@@ -51,9 +51,9 @@ app.use((req, res, next) => {
   next();
 });
 
+
 // Insert your routing HTML code here.
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
-
 
 const userRoutes = require('./src/routes/userRoutes');
 app.use('/users', userRoutes);
