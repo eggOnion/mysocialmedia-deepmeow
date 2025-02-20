@@ -28,12 +28,12 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false, httpOnly: true, sameSite: 'Lax' } // Set to true if using HTTPS
+  cookie: { secure: false, httpOnly: true, sameSite: 'None' } // Set to true if using HTTPS
 }));
 
 // const allowedOrigins = ["http://localhost:3000", "https://xxx"];
 
-app.use((req, res, next) => {  
+app.use((req, res, next) => {
   // const origin = req.headers.origin;
   // if (allowedOrigins.includes(origin)) {
   //   res.setHeader("Access-Control-Allow-Origin", origin);
