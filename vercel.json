@@ -8,5 +8,9 @@
   ],
   "routes": [
     { "src": "/(.*)", "dest": "app.js" }
-  ]
+  ],
+  "env": {
+    "MONGODB_URI": "@mongodb_uri",
+    "SESSION_SECRET": "@session_secret"
+  }
 }

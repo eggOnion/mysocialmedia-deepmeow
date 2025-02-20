@@ -12,8 +12,3 @@ router.put('/posts/:postId', authenticateJWT, postController.updatePost);
 router.delete('/posts/:postId', authenticateJWT, postController.deletePost);
 
 module.exports = router;
-
-
-// Protect all routes with authenticateJWT middleware
-// router.use(authenticateJWT);
-// console.log('Middleware:', authenticateJWT);
