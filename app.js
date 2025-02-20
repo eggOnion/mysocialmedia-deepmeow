@@ -28,7 +28,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: process.env.NODE_ENV === "production", httpOnly: true, sameSite: 'None' } // Set to true if using HTTPS
+  cookie: { secure: false, httpOnly: true, sameSite: 'Lax' } // Set to true if using HTTPS
 }));
 
 // const allowedOrigins = ["http://localhost:3000", "https://xxx"];
