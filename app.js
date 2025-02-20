@@ -10,7 +10,8 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://vercel.com/eggonions-projects/mysocialmedia-deepmeow"], // Allow both local and production frontend
+  // origin: ["http://localhost:3000", "https://vercel.com/eggonions-projects/mysocialmedia-deepmeow"], // Allow both local and production frontend
+  origin: "*", // Allow both local and production frontend
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true, // Allow sending cookies/sessions
   allowedHeaders: ["Content-Type", "Authorization"]
