@@ -30,6 +30,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: true, httpOnly: true, sameSite: 'None' } // Set to true if using HTTPS
 }));
+res.json({ token });
 
 
 // const allowedOrigins = ["http://localhost:3000", "https://xxx"];

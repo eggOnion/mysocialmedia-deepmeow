@@ -6,8 +6,8 @@ const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
 
 function authenticateJWT(req, res, next) {
   const authHeader = req.header('Authorization');
-  const sessionToken = req.session.token; // Get session token
-  // const sessionToken = req.cookies.token; // Get cookie token
+  // const sessionToken = req.session.token; // Get session token
+  const sessionToken = req.cookies.token; // Get cookie token
 
   console.log(`auth: ${authHeader}`);
   console.log(`sess: ${sessionToken}`);
