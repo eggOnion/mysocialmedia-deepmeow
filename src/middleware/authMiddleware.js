@@ -16,6 +16,8 @@ function authenticateJWT(req, res, next) {
 
   if (!authToken || !sessionToken) {
     // logger.error("Response error 401: Access denied. No token found.");
+    console.log(`auth: ${authHeader}`);
+    console.log(`sess: ${sessionToken}`);
     return res.status(401).json({ message: 'Access denied. No token found.' });
   }
 
