@@ -13,6 +13,7 @@ app.use(cors({
   origin: "*", // Explicitly define frontend origin
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true, // Allow credentials (cookies, sessions) 
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 
