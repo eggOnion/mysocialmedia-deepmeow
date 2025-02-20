@@ -10,7 +10,8 @@
     { "src": "/(.*)", "dest": "app.js" }
   ],
   "env": {
-    "MONGODB_URI": "@mongodb_uri",
-    "SESSION_SECRET": "@session_secret"
+    "MONGODB_URI": "@MONGODB_URI",
+    "JWT_SECRET": "@JWT_SECRET",
+    "SESSION_SECRET": "@SESSION_SECRET"
   }
 }
