@@ -8,6 +8,9 @@ function authenticateJWT(req, res, next) {
   const authHeader = req.header('Authorization');
   const sessionToken = req.session.token; // Get session token
 
+  console.log(`auth: ${authHeader}`);
+  console.log(`sess: ${sessionToken}`);
+
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'Access denied. No Bearer token provided.' });
   }
@@ -15,9 +18,7 @@ function authenticateJWT(req, res, next) {
   const authToken = authHeader.split(' ')[1]; // Extract token from "Bearer <token>"
 
   if (!authToken || !sessionToken) {
-    // logger.error("Response error 401: Access denied. No token found.");
-    console.log(`auth: ${authHeader}`);
-    console.log(`sess: ${sessionToken}`);
+    // logger.error("Response error 401: Access denied. No token found.");  
     return res.status(401).json({ message: 'Access denied. No token found.' });
   }
 
