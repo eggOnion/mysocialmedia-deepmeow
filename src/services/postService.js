@@ -1,5 +1,5 @@
 const Post = require('../models/postModel');
-const logger = require('../utils/logger');
+// const logger = require('../utils/logger');
 
 
 // ----------------------------------------- GET All comments -----------------------------------------
