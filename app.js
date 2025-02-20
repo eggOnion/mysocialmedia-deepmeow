@@ -31,8 +31,10 @@ app.use(session({
   cookie: { secure: false, httpOnly: true, sameSite: 'Lax' } // Set to true if using HTTPS
 }));
 
+const allowedOrigin = "http://localhost:3000";
+
 app.use((req, res, next) => {  
-  res.header("Access-Control-Allow-Origin", req.headers.origin); // No wildcard when credentials: true
+  res.header("Access-Control-Allow-Origin", allowedOrigin); // No wildcard when credentials: true
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Credentials", "true"); // Allow credentials
