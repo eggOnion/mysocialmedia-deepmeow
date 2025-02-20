@@ -31,19 +31,19 @@ app.use(session({
   cookie: { secure: false, httpOnly: true, sameSite: 'Lax' } // Set to true if using HTTPS
 }));
 
-// app.use((req, res, next) => {  
-//   res.header("Access-Control-Allow-Origin", req.headers.origin); // No wildcard when credentials: true
-//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   res.header("Access-Control-Allow-Credentials", "true"); // Allow credentials
+app.use((req, res, next) => {  
+  res.header("Access-Control-Allow-Origin", req.headers.origin); // No wildcard when credentials: true
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true"); // Allow credentials
 
-//   // Handle preflight requests
-//   if (req.method === "OPTIONS") {
-//     return res.sendStatus(204);
-//   }
+  // Handle preflight requests
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
 
-//   next();
-// });
+  next();
+});
 
 // Insert your routing HTML code here.
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
