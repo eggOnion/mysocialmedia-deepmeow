@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cors({
   origin: "http://localhost:3000", // Explicitly define frontend origin
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true, // Allow credentials (cookies, sessions) 
+  // credentials: true, // Allow credentials (cookies, sessions) 
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  // saveUninitialized: true,
+  saveUninitialized: true,
   cookie: { secure: false, httpOnly: true, sameSite: 'Lax' } // Set to true if using HTTPS
 }));
 
