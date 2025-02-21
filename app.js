@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cors({
   origin: "http://localhost:3000", // Explicitly define frontend origin
   methods: ["GET", "POST", "PUT", "DELETE"],
-  // credentials: true, // Allow credentials (cookies, sessions) 
+  credentials: true, // Allow credentials (cookies, sessions) 
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", req.headers.origin); // No wildcard when credentials: true
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  // res.header("Access-Control-Allow-Credentials", "true"); // Allow credentials
+  res.header("Access-Control-Allow-Credentials", "true"); // Allow credentials
 
   // Handle preflight requests
   if (req.method === "OPTIONS") {
