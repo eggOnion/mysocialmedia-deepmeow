@@ -9,9 +9,6 @@ function authenticateJWT(req, res, next) {
   const sessionToken = req.session.token; // Get session token
   // const sessionToken = req.cookies.token; // Get cookie token
 
-  console.log(`auth: ${authHeader}`);
-  console.log(`sess: ${sessionToken}`);
-
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'Access denied. No Bearer token provided.' });
   }
