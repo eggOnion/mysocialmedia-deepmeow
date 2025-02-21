@@ -13,7 +13,7 @@ function authenticateJWT(req, res, next) {
   console.log(`sess: ${sessionToken}`);
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Access denied. No Bearer token provided.' });
+    return res.status(401).json({ message: `Access denied. No Bearer token provided. ${sessionToken}` });
   }
 
   const authToken = authHeader.split(' ')[1]; // Extract token from "Bearer <token>"
