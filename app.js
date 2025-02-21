@@ -9,13 +9,21 @@ const { authenticater } = require('./src/middleware/authMiddleware');
 const app = express();
 app.use(express.json());
 
+// ✅ Allow only whitelisted frontend origins
+const allowedOrigins = ["https://eggonion.github.io/deepmeow", "http://localhost:3000"];
+
 app.use(cors({
-  origin: "*", // Explicitly define frontend origin
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, origin);
+    } else {
+      callback(new Error("CORS not allowed"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true, // Allow credentials (cookies, sessions) 
+  credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
-
 
 const PORT = process.env.PORT || 5000;
 mongoose.set('strictQuery', false);
@@ -24,33 +32,31 @@ const uri = process.env.MONGODB_URI;
 mongoose.connect(uri, { 'dbName': 'SocialDB' });
 
 app.use(express.urlencoded({ extended: true }));
+
+// ✅ Use Secure Cookies for GitHub Pages (HTTPS)
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false, httpOnly: true, sameSite: 'Lax' } // Set to true if using HTTPS
+  cookie: { secure: true, httpOnly: true, sameSite: 'Lax' } // secure: true ensures cookies work over HTTPS
 }));
 
-
-// const allowedOrigins = ["http://localhost:3000", "https://mysocialmedia-deepmeow.vercel.app"];
+// ✅ CORS Middleware for Preflight Requests
 app.use((req, res, next) => {
-  // const origin = req.headers.origin;
-  // if (allowedOrigins.includes(origin)) {
-  //   res.setHeader("Access-Control-Allow-Origin", origin);
-  // }
-  res.header("Access-Control-Allow-Origin", req.headers.origin); // No wildcard when credentials: true
+  if (allowedOrigins.includes(req.headers.origin)) {
+    res.header("Access-Control-Allow-Origin", req.headers.origin);
+    res.header("Access-Control-Allow-Credentials", "true");
+  }
+
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true"); // Allow credentials
 
-  // Handle preflight requests
   if (req.method === "OPTIONS") {
     return res.sendStatus(204);
   }
 
   next();
 });
-
 
 // Insert your routing HTML code here.
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
@@ -60,6 +66,5 @@ app.use('/users', userRoutes);
 
 const postRoutes = require('./src/routes/postRoutes');
 app.use('/', postRoutes);
-
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
