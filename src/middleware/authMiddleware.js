@@ -18,7 +18,7 @@ function authenticateJWT(req, res, next) {
 
   const authToken = authHeader.split(' ')[1]; // Extract token from "Bearer <token>"
 
-  if (!authToken || !sessionToken) {
+  if (!authToken) {
     // logger.error("Response error 401: Access denied. No token found.");  
     return res.status(401).json({ message: 'Access denied. No token found.' });
   }
