@@ -9,19 +9,15 @@ const { authenticater } = require('./src/middleware/authMiddleware');
 const app = express();
 app.use(express.json());
 
-// CORS setup
+// CORS setup to allow all origins dynamically
 app.use(cors({
   origin: function(origin, callback) {
-    // Only allow the production URL
-    const allowedOrigin = "https://eggonion.github.io/deepmeow/";
-    if (origin === allowedOrigin || !origin) {
-      callback(null, true);  // Allow request from this origin
-    } else {
-      callback(new Error('Not allowed by CORS'));  // Reject request if origin is not allowed
-    }
+    // Allow all origins by setting the header dynamically
+    // This is required when `credentials: true` is enabled
+    callback(null, true);  // Allow request from any origin
   },
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true, // Allow credentials (cookies, sessions) 
+  credentials: true,  // Allow credentials (cookies, sessions) 
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
@@ -49,7 +45,7 @@ app.use(session({
 
 // Set headers for CORS handling on each request (important for preflight checks)
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", req.headers.origin);  // No wildcard when credentials: true
+  res.header("Access-Control-Allow-Origin", req.headers.origin);  // Set dynamically for all origins
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Credentials", "true"); // Allow credentials
