@@ -23,7 +23,7 @@ mongoose.set('strictQuery', false);
 const uri = process.env.MONGODB_URI;
 mongoose.connect(uri, { 'dbName': 'SocialDB' });
 
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 
 //Use this settings when using localhost:3000
 //app.use(express.urlencoded({ extended: true }));
@@ -34,16 +34,16 @@ app.use(express.urlencoded({ extended: true }));
 //   cookie: { secure: false, httpOnly: true, sameSite: 'Lax' }
 // }));
 
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: { 
-    secure: true,  // Must be true for HTTPS
-    httpOnly: true,
-    sameSite: "None" // Allow cross-site requests
-  }
-}));
+// app.use(session({
+//   secret: process.env.SESSION_SECRET,
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: { 
+//     secure: true,  // Must be true for HTTPS
+//     httpOnly: true,
+//     sameSite: "None" // Allow cross-site requests
+//   }
+// }));
 
 
 const allowedOrigins = "https://eggonion.github.io/deepmeow";
