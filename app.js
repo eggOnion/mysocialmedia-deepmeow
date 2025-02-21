@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: ["https://eggOnion.github.io", "http://localhost:3000"], // Explicitly define frontend origin
+  origin: "https://eggOnion.github.io", // Explicitly define frontend origin
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true, // Allow credentials (cookies, sessions) 
   allowedHeaders: ["Content-Type", "Authorization"]
@@ -23,20 +23,30 @@ mongoose.set('strictQuery', false);
 const uri = process.env.MONGODB_URI;
 mongoose.connect(uri, { 'dbName': 'SocialDB' });
 
-app.use(express.urlencoded({ extended: true }));
+//Use this settings for localhost:3000
+// app.use(express.urlencoded({ extended: true }));
+// app.use(session({
+//   secret: process.env.SESSION_SECRET,
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: { secure: false, httpOnly: true, sameSite: 'Lax' }
+// }));
+
+
+//Use this setting when frontend is not running on localhost
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true, httpOnly: true, sameSite: 'Lax' } // Set to true if using HTTPS - false if using 3000
+  cookie: { secure: true, httpOnly: true, sameSite: 'Lax' } 
 }));
 
 
 app.use((req, res, next) => {
-  const allowedOrigins = ["https://eggOnion.github.io", "http://localhost:3000"];
-  if (allowedOrigins.includes(req.headers.origin)) {
-    res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
-  }
+  // const allowedOrigins = ["https://eggOnion.github.io", "http://localhost:3000"];
+  // if (allowedOrigins.includes(req.headers.origin)) {
+  //   res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+  // }
   res.header("Access-Control-Allow-Origin", req.headers.origin); // No wildcard when credentials: true
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
