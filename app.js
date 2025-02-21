@@ -11,18 +11,19 @@ app.use(express.json());
 
 app.use(cors({
   origin: function(origin, callback) {
-    // List of allowed origins
-    const allowedOrigins = ["http://localhost:3000", "https://eggonion.github.io/deepmeow/"];
-    if (allowedOrigins.includes(origin) || !origin) {
+    // Only allow the production URL
+    const allowedOrigin = "https://eggonion.github.io/deepmeow/";
+    if (origin === allowedOrigin || !origin) {
       callback(null, true);  // Allow request from this origin
     } else {
-      callback(new Error('Not allowed by CORS'));  // Reject request if origin is not in the allowed list
+      callback(new Error('Not allowed by CORS'));  // Reject request if origin is not allowed
     }
   },
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true, // Allow credentials (cookies, sessions) 
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
 
 
 const PORT = process.env.PORT || 5000;
@@ -40,12 +41,7 @@ app.use(session({
 }));
 
 
-// const allowedOrigins = ["http://localhost:3000", "https://mysocialmedia-deepmeow.vercel.app"];
 app.use((req, res, next) => {
-  // const origin = req.headers.origin;
-  // if (allowedOrigins.includes(origin)) {
-  //   res.setHeader("Access-Control-Allow-Origin", origin);
-  // }
   res.header("Access-Control-Allow-Origin", req.headers.origin); // No wildcard when credentials: true
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
