@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
+  // saveUninitialized: true,
   cookie: { secure: false, httpOnly: true, sameSite: 'Lax' } // Set to true if using HTTPS
 }));
 
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", req.headers.origin); // No wildcard when credentials: true
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true"); // Allow credentials
+  // res.header("Access-Control-Allow-Credentials", "true"); // Allow credentials
 
   // Handle preflight requests
   if (req.method === "OPTIONS") {
