@@ -9,20 +9,18 @@ const { authenticater } = require('./src/middleware/authMiddleware');
 const app = express();
 app.use(express.json());
 
-// Allow only whitelisted frontend origins
-const allowedOrigins = ["https://eggonion.github.io/deepmeow", "http://localhost:3000"];
-
 app.use(cors({
-  origin: function (origin, callback) {
-    const allowedOrigins = ["https://eggonion.github.io/deepmeow", "http://localhost:3000"];
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, origin);
+  origin: function(origin, callback) {
+    // List of allowed origins
+    const allowedOrigins = ["http://localhost:3000", "https://eggonion.github.io/deepmeow/"];
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);  // Allow request from this origin
     } else {
-      callback(new Error("CORS not allowed"));
+      callback(new Error('Not allowed by CORS'));  // Reject request if origin is not in the allowed list
     }
   },
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true, 
+  credentials: true, // Allow credentials (cookies, sessions) 
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
@@ -34,29 +32,28 @@ const uri = process.env.MONGODB_URI;
 mongoose.connect(uri, { 'dbName': 'SocialDB' });
 
 app.use(express.urlencoded({ extended: true }));
-
-// Use Secure Cookies for GitHub Pages (HTTPS)
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true, httpOnly: true, sameSite: 'Lax' } // secure: true ensures cookies work over HTTPS
+  cookie: { secure: false, httpOnly: true, sameSite: 'Lax' } // Set to true if using HTTPS
 }));
 
-// CORS Middleware for Preflight Requests
-app.use((req, res, next) => {
-  const allowedOrigins = ["https://eggonion.github.io/deepmeow", "http://localhost:3000"];
-  
-  if (allowedOrigins.includes(req.headers.origin)) {
-    res.header("Access-Control-Allow-Origin", req.headers.origin);
-    res.header("Access-Control-Allow-Credentials", "true");
-  }
 
+// const allowedOrigins = ["http://localhost:3000", "https://mysocialmedia-deepmeow.vercel.app"];
+app.use((req, res, next) => {
+  // const origin = req.headers.origin;
+  // if (allowedOrigins.includes(origin)) {
+  //   res.setHeader("Access-Control-Allow-Origin", origin);
+  // }
+  res.header("Access-Control-Allow-Origin", req.headers.origin); // No wildcard when credentials: true
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true"); // Allow credentials
 
+  // Handle preflight requests
   if (req.method === "OPTIONS") {
-    return res.sendStatus(204); // Properly handle preflight requests
+    return res.sendStatus(204);
   }
 
   next();
@@ -71,5 +68,6 @@ app.use('/users', userRoutes);
 
 const postRoutes = require('./src/routes/postRoutes');
 app.use('/', postRoutes);
+
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
