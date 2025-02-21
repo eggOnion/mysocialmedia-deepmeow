@@ -23,23 +23,16 @@ mongoose.set('strictQuery', false);
 const uri = process.env.MONGODB_URI;
 mongoose.connect(uri, { 'dbName': 'SocialDB' });
 
-//Use this settings for localhost:3000
-// app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+
+//Use this settings when using localhost:3000
+//app.use(express.urlencoded({ extended: true }));
 // app.use(session({
 //   secret: process.env.SESSION_SECRET,
 //   resave: false,
 //   saveUninitialized: true,
 //   cookie: { secure: false, httpOnly: true, sameSite: 'Lax' }
 // }));
-
-
-//Use this setting when frontend is not running on localhost
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true, httpOnly: true, sameSite: 'Lax' } 
-}));
 
 
 app.use((req, res, next) => {
