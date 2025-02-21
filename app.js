@@ -34,6 +34,18 @@ app.use(express.urlencoded({ extended: true }));
 //   cookie: { secure: false, httpOnly: true, sameSite: 'Lax' }
 // }));
 
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { 
+    secure: true,  // Must be true for HTTPS
+    httpOnly: true,
+    sameSite: "None" // Allow cross-site requests
+  }
+}));
+
+
 
 app.use((req, res, next) => {
   // const allowedOrigins = ["https://eggOnion.github.io", "http://localhost:3000"];
