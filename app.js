@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: "https://eggOnion.github.io", // Explicitly define frontend origin
+  origin: "https://eggonion.github.io/deepmeow", // Explicitly define frontend origin
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true, // Allow credentials (cookies, sessions) 
   allowedHeaders: ["Content-Type", "Authorization"]
