@@ -7,13 +7,11 @@ const User = require('../models/userModel');
 // ----------------------------------------- REGISTER -----------------------------------------
 const registerUser = async (username, email, password) => {
 
-     // Convert username & email to lowercase for checking
-     const existingUser = await User.findOne({
-        $or: [
-            { username: { $regex: `^${username}$`, $options: "i" } }, 
-            { email: { $regex: `^${email}$`, $options: "i" } }
-        ]
-    });
+    // Convert username and email to lowercase
+    username = username.toLowerCase();
+    email = email.toLowerCase();
+
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
 
     if (existingUser) {
         throw new Error('User already exists');
@@ -22,7 +20,6 @@ const registerUser = async (username, email, password) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Save username and email as they are (original case)
     const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
 
@@ -31,6 +28,7 @@ const registerUser = async (username, email, password) => {
 
 
 // ----------------------------------------- LOGIN -----------------------------------------
+
 const loginUser = async (username, password, session) => {
 
     // Check if another user is already logged in
@@ -38,9 +36,12 @@ const loginUser = async (username, password, session) => {
         throw new Error('Another user is already logged in. Please log out first.');
     }
 
-    // Find user case-insensitively
-    const user = await User.findOne({ 
-        username: { $regex: `^${username}$`, $options: "i" } 
+    // Convert username to lowercase for case-insensitive search
+    const lowercasedUsername = username.toLowerCase();
+
+    // Find user case-insensitively by lowercased username
+    const user = await User.findOne({
+        username: { $regex: `^${lowercasedUsername}$`, $options: "i" }
     });
 
     if (!user) {
@@ -55,14 +56,14 @@ const loginUser = async (username, password, session) => {
 
     // Generate a JWT token
     const token = jwt.sign(
-        { userId: user._id, username: user.username }, // Payload
+        { userId: user._id, username: user.username }, // Payload (keep original username in JWT)
         process.env.JWT_SECRET,                        // Secret key
         { expiresIn: '1h' }                            // Expiration time
     );
 
     // Store the token and user details in the session    
     session.token = token;
-    session.user = { userId: user._id, username: user.username };
+    session.user = { userId: user._id, username: user.username }; // Store original case in session
 
     return { token, user };
 };
