@@ -3,6 +3,7 @@ const session = require('express-session');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const path = require('path');
+require('dotenv').config();
 
 const { authenticater } = require('./src/middleware/authMiddleware');
 

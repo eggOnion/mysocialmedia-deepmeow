@@ -7,7 +7,13 @@ const User = require('../models/userModel');
 // ----------------------------------------- REGISTER -----------------------------------------
 const registerUser = async (username, email, password) => {
 
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+     // Convert username & email to lowercase for checking
+     const existingUser = await User.findOne({
+        $or: [
+            { username: { $regex: `^${username}$`, $options: "i" } }, 
+            { email: { $regex: `^${email}$`, $options: "i" } }
+        ]
+    });
 
     if (existingUser) {
         throw new Error('User already exists');
@@ -16,6 +22,7 @@ const registerUser = async (username, email, password) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+    // Save username and email as they are (original case)
     const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
 
@@ -31,8 +38,11 @@ const loginUser = async (username, password, session) => {
         throw new Error('Another user is already logged in. Please log out first.');
     }
 
-    // Find the user in the database
-    const user = await User.findOne({ username });
+    // Find user case-insensitively
+    const user = await User.findOne({ 
+        username: { $regex: `^${username}$`, $options: "i" } 
+    });
+
     if (!user) {
         throw new Error('Invalid credentials');
     }

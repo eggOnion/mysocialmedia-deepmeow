@@ -5,7 +5,7 @@ const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
 function authenticateJWT(req, res, next) {
     const authHeader = req.header('Authorization'); // Get Authorization header
 
-    // console.log(`🔑 Authorization Header: ${authHeader}`);
+    // console.log(`Authorization Header: ${authHeader}`);
 
     // Check if the token is present in the Authorization header
     if (!authHeader || !authHeader.startsWith('Bearer ')) {

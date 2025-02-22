@@ -61,13 +61,12 @@ app.use((req, res, next) => {
 // Serve the HTML file for the root route
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
-// User routes
+
 const userRoutes = require('./src/routes/userRoutes');
 app.use('/users', userRoutes);
 
-// Post routes
 const postRoutes = require('./src/routes/postRoutes');
 app.use('/', postRoutes);
 
-// Start the server
+
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
